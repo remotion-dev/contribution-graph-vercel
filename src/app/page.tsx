@@ -1,57 +1,61 @@
 "use client";
 
-import { Player } from "@remotion/player";
 import type { NextPage } from "next";
-import { useMemo, useState } from "react";
-import { z } from "zod";
-import {
-  CompositionProps,
-  defaultMyCompProps,
-  DURATION_IN_FRAMES,
-  VIDEO_FPS,
-  VIDEO_HEIGHT,
-  VIDEO_WIDTH,
-} from "../../types/constants";
-import { RenderControls } from "../components/RenderControls";
+import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "../components/Button";
+import { InputContainer } from "../components/Container";
 import { Tips } from "../components/Tips";
-import { Main } from "../remotion/MyComp/Main";
 
 const Home: NextPage = () => {
-  const [text, setText] = useState<string>(defaultMyCompProps.title);
+  const [username, setUsername] = useState("");
+  const router = useRouter();
 
-  const inputProps: z.infer<typeof CompositionProps> = useMemo(() => {
-    return {
-      title: text,
-    };
-  }, [text]);
+  const onSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      const trimmed = username.trim();
+      if (trimmed) {
+        router.push(`/${trimmed}`);
+      }
+    },
+    [username, router],
+  );
 
   return (
     <div>
       <div className="max-w-screen-md m-auto mb-5 px-4 mt-16 flex flex-col gap-10">
-        <div className="overflow-hidden rounded-geist shadow-[0_0_200px_rgba(0,0,0,0.15)]">
-          <Player
-            component={Main}
-            inputProps={inputProps}
-            durationInFrames={DURATION_IN_FRAMES}
-            fps={VIDEO_FPS}
-            compositionHeight={VIDEO_HEIGHT}
-            compositionWidth={VIDEO_WIDTH}
-            style={{
-              width: "100%",
-            }}
-            controls
-            autoPlay
-            loop
-          />
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-geist mb-2">
+            GitHub Contribution Graph Video
+          </h1>
+          <p className="text-subtitle font-geist">
+            Enter a GitHub username to generate a contribution graph video.
+          </p>
         </div>
-        <section className="flex flex-col gap-4">
-          <RenderControls
-            text={text}
-            setText={setText}
-            inputProps={inputProps}
-          ></RenderControls>
-        </section>
-        <Tips></Tips>
+        <form onSubmit={onSubmit}>
+          <InputContainer>
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="username"
+                className="text-sm font-medium text-foreground"
+              >
+                GitHub Username
+              </label>
+              <input
+                id="username"
+                className="leading-[1.7] block w-full rounded-geist bg-background p-geist-half text-foreground text-sm border border-unfocused-border-color transition-colors duration-150 ease-in-out focus:border-focused-border-color outline-none"
+                placeholder="octocat"
+                value={username}
+                onChange={(e) => setUsername(e.currentTarget.value)}
+              />
+            </div>
+            <div className="flex justify-end mt-4">
+              <Button disabled={!username.trim()}>Generate video</Button>
+            </div>
+          </InputContainer>
+        </form>
+        <Tips />
       </div>
     </div>
   );

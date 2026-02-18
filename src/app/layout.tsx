@@ -1,9 +1,12 @@
+import { Inter } from "next/font/google";
 import { Metadata, Viewport } from "next";
 import "../../styles/global.css";
 
+const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
-  title: "Remotion rendering on Vercel Sandbox",
-  description: "Remotion rendering on Vercel Sandbox",
+  title: "GitHub Contribution Graph Video",
+  description: "Generate an animated video of your GitHub contribution graph",
 };
 
 export const viewport: Viewport = {
@@ -19,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-background">{children}</body>
+      <body className={`bg-background ${inter.className}`}>{children}</body>
     </html>
   );
 }

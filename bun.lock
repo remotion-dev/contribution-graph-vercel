@@ -11,6 +11,7 @@
         "@remotion/player": "4.0.424",
         "@remotion/shapes": "4.0.424",
         "@remotion/tailwind-v4": "4.0.424",
+        "@remotion/transitions": "4.0.424",
         "@types/bun": "1.3.3",
         "@vercel/blob": "2.0.1",
         "@vercel/functions": "^3.4.1",
@@ -357,6 +358,8 @@
     "@remotion/studio-shared": ["@remotion/studio-shared@4.0.424", "", { "dependencies": { "remotion": "4.0.424" } }, "sha512-1vSWV/Fagns9FtFTxozUSh7qylTPjw6glH/hIr5cNwdHO4TEy5gDu+yAiuBBPCLoQMhaCNrThsQYUP4x7AbZ7w=="],
 
     "@remotion/tailwind-v4": ["@remotion/tailwind-v4@4.0.424", "", { "dependencies": { "@tailwindcss/postcss": "4.1.1", "css-loader": "5.2.7", "postcss": "8.5.1", "postcss-loader": "8.1.1", "postcss-preset-env": "10.1.3", "style-loader": "4.0.0", "tailwindcss": "4.1.1" }, "peerDependencies": { "@remotion/bundler": "4.0.424" } }, "sha512-wjI1O4mrJob+tz1hT5+kn/Y7gwuzjZfkNuLmhmXOIdY3DDBOtvBPHouxR7vMKfS4T5Y5wz452K3iCAG5dPqlCw=="],
+
+    "@remotion/transitions": ["@remotion/transitions@4.0.424", "", { "dependencies": { "@remotion/paths": "4.0.424", "@remotion/shapes": "4.0.424", "remotion": "4.0.424" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-vvokb6tI0Z1snRODy3TldwobdZ09JueAMNqbzqLa7Bnt79JF1zwyBhW3lqESsB4AzYpNZC0gTfmkxThMwL/xBQ=="],
 
     "@remotion/web-renderer": ["@remotion/web-renderer@4.0.424", "", { "dependencies": { "@remotion/licensing": "4.0.424", "mediabunny": "1.34.4", "remotion": "4.0.424" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-mHeKokorZgMzi5tzOVBdgRycsw23d9CUyOmkdtXh1gLpGH6c1jBvsN5JZ7jv17pCLhBPlpNtCACGGDWO28rMwQ=="],
 
