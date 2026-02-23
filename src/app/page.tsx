@@ -44,6 +44,8 @@ const Home: NextPage = () => {
               </label>
               <input
                 id="username"
+                type="text"
+                autoComplete="off"
                 className="leading-[1.7] block w-full rounded-geist bg-background p-geist-half text-foreground text-sm border border-unfocused-border-color transition-colors duration-150 ease-in-out focus:border-focused-border-color outline-none"
                 placeholder="octocat"
                 value={username}
