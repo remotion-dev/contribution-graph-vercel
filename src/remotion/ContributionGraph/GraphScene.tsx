@@ -8,6 +8,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { useThree } from "@react-three/fiber";
+import { RoundedBox } from "@react-three/drei";
 
 const COLUMNS = 52;
 const ROWS = 7;
@@ -29,38 +30,27 @@ const CameraSetup: React.FC = () => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
 
-  // Zoom in during first 40% of the scene
-  const zoomProgress = interpolate(
-    frame,
-    [0, durationInFrames * 0.4],
-    [0, 1],
-    {
-      easing: Easing.inOut(Easing.quad),
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    },
-  );
-  const distance = interpolate(zoomProgress, [0, 1], [48, 30]);
-
-  // Pan from left to right over the full duration
-  const panProgress = interpolate(frame, [0, durationInFrames], [0, 1], {
+  const progress = interpolate(frame, [0, durationInFrames * 0.6], [0, 1], {
     easing: Easing.inOut(Easing.quad),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const panX = interpolate(panProgress, [0, 1], [-10, 10]);
 
-  // Subtle rotation offset
-  const rotOffset = interpolate(panProgress, [0, 1], [-2, 2]);
+  // Zoom: start closer, end at current level
+  const distance = interpolate(progress, [0, 1], [12, 22]);
+
+  // Y-axis rotation: start rotated, settle to symmetric (0)
+  const azimuth = interpolate(progress, [0, 1], [0.6, 0]);
 
   // 45-degree elevation
   const elevation = Math.PI / 4;
+  const horizontalDist = distance * Math.cos(elevation);
   camera.position.set(
-    panX + rotOffset,
+    Math.sin(azimuth) * horizontalDist,
     distance * Math.sin(elevation),
-    distance * Math.cos(elevation),
+    Math.cos(azimuth) * horizontalDist,
   );
-  camera.lookAt(panX * 0.5, 0, 0);
+  camera.lookAt(0, 0, 0);
 
   return null;
 };
@@ -79,11 +69,15 @@ const Tile: React.FC<{
   const targetHeight =
     value === 0 ? 0.15 : (value / maxValue) * MAX_HEIGHT + 0.15;
 
+  const { durationInFrames } = useVideoConfig();
+  const maxDelay = durationInFrames * 0.6 - 40;
+  const totalTiles = COLUMNS * ROWS;
+
   const progress = spring({
     frame,
     fps,
-    delay: index * 0.3,
-    config: { damping: 200 },
+    delay: (index / totalTiles) * maxDelay,
+    config: { damping: 15, stiffness: 80, mass: 2 },
   });
 
   const scaleY = interpolate(progress, [0, 1], [0, 1], {
@@ -95,10 +89,18 @@ const Tile: React.FC<{
 
   return (
     <group position={[x, 0, z]} scale={[1, Math.max(scaleY, 0.001), 1]}>
-      <mesh position={[0, targetHeight / 2, 0]}>
-        <boxGeometry args={[TILE_SIZE, targetHeight, TILE_SIZE]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
+      <RoundedBox
+        args={[TILE_SIZE, targetHeight, TILE_SIZE]}
+        radius={0.06}
+        smoothness={1}
+        position={[0, targetHeight / 2, 0]}
+      >
+        {value === 0 ? (
+          <meshBasicMaterial color={color} />
+        ) : (
+          <meshStandardMaterial color={color} />
+        )}
+      </RoundedBox>
     </group>
   );
 };

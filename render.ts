@@ -34,6 +34,7 @@ try {
     codec: "h264",
     outputLocation: "/tmp/video.mp4",
     inputProps: config.inputProps,
+    gl: "swangle",
     onProgress: ({ progress }) => {
       console.log(JSON.stringify({ type: "progress", progress }));
     },

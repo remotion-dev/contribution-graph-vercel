@@ -18,7 +18,7 @@ export const defaultMyCompProps: z.infer<typeof CompositionProps> = {
   ),
 };
 
-export const DURATION_IN_FRAMES = 200;
-export const VIDEO_WIDTH = 1280;
-export const VIDEO_HEIGHT = 720;
+export const DURATION_IN_FRAMES = 300;
+export const VIDEO_WIDTH = 1080;
+export const VIDEO_HEIGHT = 600;
 export const VIDEO_FPS = 30;
