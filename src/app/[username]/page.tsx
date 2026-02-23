@@ -75,21 +75,26 @@ export default function UserPage() {
   const inputProps: z.infer<typeof CompositionProps> | null = useMemo(() => {
     if (!data) return null;
 
-    const currentYear = new Date().getFullYear().toString();
+    const today = new Date();
+    const oneYearAgo = new Date(today);
+    oneYearAgo.setFullYear(today.getFullYear() - 1);
 
-    const thisYear = data.contributions
-      .filter((d) => d.date.startsWith(currentYear))
+    const last365 = data.contributions
+      .filter((d) => {
+        const date = new Date(d.date);
+        return date > oneYearAgo && date <= today;
+      })
       .sort(
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
       );
 
-    const contributions = thisYear.map((d) => d.count);
+    const contributions = last365.map((d) => d.count);
 
     while (contributions.length < 365) {
       contributions.push(0);
     }
 
-    const totalContributions = data.total[currentYear] ?? 0;
+    const totalContributions = last365.reduce((sum, d) => sum + d.count, 0);
 
     return {
       username,
