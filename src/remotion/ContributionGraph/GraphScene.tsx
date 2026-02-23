@@ -1,6 +1,7 @@
 import React from "react";
 import { ThreeCanvas } from "@remotion/three";
 import {
+  Easing,
   interpolate,
   spring,
   useCurrentFrame,
@@ -25,8 +26,42 @@ function getGreen(value: number, maxValue: number): string {
 
 const CameraSetup: React.FC = () => {
   const { camera } = useThree();
-  camera.position.set(0, 30, 30);
-  camera.lookAt(0, 0, 0);
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+
+  // Zoom in during first 40% of the scene
+  const zoomProgress = interpolate(
+    frame,
+    [0, durationInFrames * 0.4],
+    [0, 1],
+    {
+      easing: Easing.inOut(Easing.quad),
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    },
+  );
+  const distance = interpolate(zoomProgress, [0, 1], [48, 30]);
+
+  // Pan from left to right over the full duration
+  const panProgress = interpolate(frame, [0, durationInFrames], [0, 1], {
+    easing: Easing.inOut(Easing.quad),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const panX = interpolate(panProgress, [0, 1], [-10, 10]);
+
+  // Subtle rotation offset
+  const rotOffset = interpolate(panProgress, [0, 1], [-2, 2]);
+
+  // 45-degree elevation
+  const elevation = Math.PI / 4;
+  camera.position.set(
+    panX + rotOffset,
+    distance * Math.sin(elevation),
+    distance * Math.cos(elevation),
+  );
+  camera.lookAt(panX * 0.5, 0, 0);
+
   return null;
 };
 
