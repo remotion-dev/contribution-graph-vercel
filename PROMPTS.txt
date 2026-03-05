@@ -1,3 +1,12 @@
+First session:
+
+---
+use remotion best practices. remove the default composition. add a new composition. slide 1: show avatar in round, the to the right of it a <div> with the username in bold, and below in gray the amount of commits. font size approximately 60px. then fade it out and go to scene 2.
+animate a github contirbution graph where every tile fades in with a time offset determined by the index. it should only use graytones: from light gray to black (for the most busy dy). as input props, it should accept an object that includes an arrax with 365 numbers. make it a 1280x720 composition, generous padding on all sides.
+---
+
+Second session (after Anthony's challenge 😁):
+
 
 ╭─── Claude Code v2.1.50 ──────────────────────────────────────────────────────╮
 │                                 │ Tips for getting started                   │
